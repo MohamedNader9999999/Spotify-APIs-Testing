@@ -1,0 +1,828 @@
+{
+	"info": {
+		"_postman_id": "96acb148-2513-4cc4-b7b2-1430f65e1202",
+		"name": "Spotify Album API Test Suite",
+		"description": "StartFragment\n\nThis Postman collection is designed to **test and validate several Spotify Web API endpoints related to album data** and user library management.  \n  \nIt ensures that the APIs:\n\n- Return correct responses for valid requests\n    \n- Handle invalid and edge-case inputs gracefully\n    \n- Enforce authentication and authorization correctly\n    \n\nThe tests are built with the goal of **integrating Spotify album features into our application**, verifying that core workflows (fetching album details, listing tracks, saving/removing albums) behave reliably under both normal and error scenarios.\n\nEndFragment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44589145",
+		"_collection_link": "https://te5555-7832.postman.co/workspace/Spotify-Project~68f6d306-72b3-4705-873e-66f057d1132e/collection/44589145-96acb148-2513-4cc4-b7b2-1430f65e1202?action=share&source=collection_link&creator=44589145"
+	},
+	"item": [
+		{
+			"name": "Authentication – Access Token Generation",
+			"item": [
+				{
+					"name": "get token",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "username",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "password",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://accounts.spotify.com/api/token",
+							"protocol": "https",
+							"host": [
+								"accounts",
+								"spotify",
+								"com"
+							],
+							"path": [
+								"api",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "StartFragment\n\n**Description:**  \n  \nThis folder contains requests for generating a valid **Spotify OAuth access token**, which is required to authorize all subsequent API requests in this collection.  \n  \nThe token will be stored in Postman environment variables so it can be automatically used in the headers of other requests.\n\nProper authentication is critical for:\n\n- Verifying authorized access to user library data\n    \n- Preventing 401 Unauthorized errors during execution\n    \n- Testing behavior when tokens are expired or invalid\n    \n\nEndFragment"
+		},
+		{
+			"name": "Albums – Spotify Album Features",
+			"item": [
+				{
+					"name": "Get Album",
+					"item": [
+						{
+							"name": "TC.1 Get Album using valid ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"available markets contains 'EG'\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.available_markets).to.include(\"EG\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{albumsUrl}}/4aawyAB9vmqN3uQ7FjRGTy",
+									"host": [
+										"{{albumsUrl}}"
+									],
+									"path": [
+										"4aawyAB9vmqN3uQ7FjRGTy"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.2 Get Album with Valid ID + Market",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{albumsUrl}}/4aawyAB9vmqN3uQ7FjRGTy?available_markets=EG",
+									"host": [
+										"{{albumsUrl}}"
+									],
+									"path": [
+										"4aawyAB9vmqN3uQ7FjRGTy"
+									],
+									"query": [
+										{
+											"key": "available_markets",
+											"value": "EG"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.3 Get Album with Invalid ID",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.4 Get Album with Expired Token",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.5 Get Album with Wrong Auth Type",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.6 Get Album Without Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"pm.test(\"available markets contains 'EG'\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.available_markets).to.include(\"EG\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{albumsUrl}}/4aawyAB9vmqN3uQ7FjRGTy",
+									"host": [
+										"{{albumsUrl}}"
+									],
+									"path": [
+										"4aawyAB9vmqN3uQ7FjRGTy"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "StartFragmentTests the `/albums/{id}` endpoint to retrieve detailed metadata about a single album.  \n  \nIncludes positive tests with valid album IDs and negative tests for invalid IDs, expired tokens, and unauthorized access."
+				},
+				{
+					"name": "Get Several Albums",
+					"item": [
+						{
+							"name": "TC.7 Get Several Albums with valid IDs",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{albumsUrl}}?ids=382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc",
+									"host": [
+										"{{albumsUrl}}"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.8 Get Several Albums with Max Allowed IDs (20)",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.9 Get Several Albums with >20 IDs",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.10 Get Several Albums with Invalid ID in List",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.11 Get Several Albums with Expired Token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{albumsUrl}}?ids=382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc",
+									"host": [
+										"{{albumsUrl}}"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.12 Get Several Albums with Wrong Auth Type",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.13 Get Several Albums without Auth",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{albumsUrl}}?ids=382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc",
+									"host": [
+										"{{albumsUrl}}"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "StartFragment\n\nTests the `/albums?ids=` endpoint to fetch details of multiple albums in a single request.  \n  \nValidates correct handling of:\n\n- Multiple valid IDs (up to 20)\n    \n- Mixed valid/invalid IDs\n    \n- Exceeding the maximum number of IDs\n    \n- Unauthorized and forbidden access"
+				},
+				{
+					"name": "Get Album Tracks",
+					"item": [
+						{
+							"name": "TC.14 Get Album Tracks for Valid Album",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{albumsUrl}}/4aawyAB9vmqN3uQ7FjRGTy/tracks",
+									"host": [
+										"{{albumsUrl}}"
+									],
+									"path": [
+										"4aawyAB9vmqN3uQ7FjRGTy",
+										"tracks"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.15 Get Album Tracks with Limit and Offset",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.16 Get Album Tracks with Invalid Album ID",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.17 Get Album Tracks with Expired Token",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.18 Get Album Tracks with Wrong Auth Type",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.19 Get Album Tracks for Valid Album With No Auth",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{albumsUrl}}/4aawyAB9vmqN3uQ7FjRGTy/tracks",
+									"host": [
+										"{{albumsUrl}}"
+									],
+									"path": [
+										"4aawyAB9vmqN3uQ7FjRGTy",
+										"tracks"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.20 Get Album Exceeding Max Limit",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					],
+					"description": "StartFragmentTests the `/albums/{id}/tracks` endpoint to retrieve all tracks from a specific album.  \n  \nIncludes verification of pagination behavior using `limit` and `offset`, and negative scenarios such as invalid album ID and expired tokens."
+				},
+				{
+					"name": "Get User's Saved Albums",
+					"item": [
+						{
+							"name": "TC.21 Get User's Saved Albums",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.spotify.com/v1/me/albums",
+									"protocol": "https",
+									"host": [
+										"api",
+										"spotify",
+										"com"
+									],
+									"path": [
+										"v1",
+										"me",
+										"albums"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.22 Get Saved Albums with Limit",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.23 Get Saved Albums with Expired Token",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.24 Get Saved Albums with Wrong Auth Type",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.25 Get User’s Saved Albums with No Auth",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.spotify.com/v1/me/albums",
+									"protocol": "https",
+									"host": [
+										"api",
+										"spotify",
+										"com"
+									],
+									"path": [
+										"v1",
+										"me",
+										"albums"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.26 Get Album Tracks Exceeding Max. Limit",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.spotify.com/v1/me/albums",
+									"protocol": "https",
+									"host": [
+										"api",
+										"spotify",
+										"com"
+									],
+									"path": [
+										"v1",
+										"me",
+										"albums"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "StartFragmentTests the `/me/albums` endpoint to retrieve albums saved in the user’s Spotify library.  \n  \nCovers correct data retrieval, limit parameter behavior, and validation of responses when the user has an empty album library, expired tokens, or incorrect authorization types."
+				},
+				{
+					"name": "Save Albums for Current User",
+					"item": [
+						{
+							"name": "TC.27 Save Multiple Albums",
+							"request": {
+								"method": "PUT",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.28 Save Albums with Invalid ID",
+							"request": {
+								"method": "PUT",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.29 Save Albums with Expired Token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{Expired Token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{BaseUrl}}/me/albums?ids=382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"me",
+										"albums"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.30 Save Albums with Wrong Auth Type",
+							"request": {
+								"method": "PUT",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.31 Save Albums With No Auth",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "{{BaseUrl}}/me/albums?ids=382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"me",
+										"albums"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo%2C2noRn2Aes5aoNVsU6iWThc"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.32 Save More Than Max Limit Of Albums",
+							"request": {
+								"method": "PUT",
+								"header": []
+							},
+							"response": []
+						}
+					],
+					"description": "StartFragment\n\nTests the `PUT /me/albums` endpoint to save one or more albums to the current user’s library.  \n  \nIncludes scenarios for:\n\n- Saving a single album\n    \n- Saving multiple albums (up to 50)\n    \n- Handling of invalid album IDs\n    \n- Unauthorized and forbidden access responses"
+				},
+				{
+					"name": "Remove Albums",
+					"item": [
+						{
+							"name": "TC.33 Remove Multiple Albums",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{token}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://api.spotify.com/v1/me/albums",
+									"protocol": "https",
+									"host": [
+										"api",
+										"spotify",
+										"com"
+									],
+									"path": [
+										"v1",
+										"me",
+										"albums"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.34 Remove Albums with Invalid ID",
+							"request": {
+								"method": "DELETE",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.35 Remove Albums with Expired Token",
+							"request": {
+								"method": "DELETE",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.36 Remove Albums with Wrong Auth Type",
+							"request": {
+								"method": "DELETE",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "TC.37 Remove Tracks Exceeding Max. Limit (>50)",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BaseUrl}}/me/albums?ids=F6XNoz3q0mVDuhA1yPj9Zf%2CNcKp1xET5YwJZrHb3QmA2K%2C8pZy4GqkF5bRUnE3wHvN1j%2CwXvTzS4aQ8oKcM2nD5rF1B%2C3eHb7kLqN6yVpZxD1tGmC9%2CUa1bR6tF5nWmE7yJ3qPzL4%2CQx7vD2fS6hJtP3rW8nBzY1%2CgM5dR8xC1kNwT4pL9hVfS7%2CjT8rP2wF1nYbM4sL6dGvQ3%2CPa3tY6vR9mQfD2xH1nWzC5%2CRk9yJ3pN6tGmV2bQ5wXcF1%2CmV1zN8rL3hQpF5tY2bWkS7%2CXq4wM9nL1hTgP2rF7bDkC5%2CFb7yP3nL1vGqR5tD2xWkM8%2ChK5vG2tR7nQwM1pD9xLzF3%2CNp6yL2tG3vQfD7xR1mWkB5%2CqG1nV8rL5hTjP3mD2xWkC7%2CBk7vQ3tR2nL1hP5mD9xWfS8%2CMv5nT2rL8hQpF3wD1xKcG7%2CzW3vR9tN1hL5pF2mD8xQkB6%2CJf8nT3rL2hQpM5dX1vWkC9",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"me",
+										"albums"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "F6XNoz3q0mVDuhA1yPj9Zf%2CNcKp1xET5YwJZrHb3QmA2K%2C8pZy4GqkF5bRUnE3wHvN1j%2CwXvTzS4aQ8oKcM2nD5rF1B%2C3eHb7kLqN6yVpZxD1tGmC9%2CUa1bR6tF5nWmE7yJ3qPzL4%2CQx7vD2fS6hJtP3rW8nBzY1%2CgM5dR8xC1kNwT4pL9hVfS7%2CjT8rP2wF1nYbM4sL6dGvQ3%2CPa3tY6vR9mQfD2xH1nWzC5%2CRk9yJ3pN6tGmV2bQ5wXcF1%2CmV1zN8rL3hQpF5tY2bWkS7%2CXq4wM9nL1hTgP2rF7bDkC5%2CFb7yP3nL1vGqR5tD2xWkM8%2ChK5vG2tR7nQwM1pD9xLzF3%2CNp6yL2tG3vQfD7xR1mWkB5%2CqG1nV8rL5hTjP3mD2xWkC7%2CBk7vQ3tR2nL1hP5mD9xWfS8%2CMv5nT2rL8hQpF3wD1xKcG7%2CzW3vR9tN1hL5pF2mD8xQkB6%2CJf8nT3rL2hQpM5dX1vWkC9"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TC.38 Remove Albums with No Auth",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{BaseUrl}}/me/albums?ids=382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo",
+									"host": [
+										"{{BaseUrl}}"
+									],
+									"path": [
+										"me",
+										"albums"
+									],
+									"query": [
+										{
+											"key": "ids",
+											"value": "382ObEPsp2rxGrnsizN5TX%2C1A2GTWGtFfWp7KSQTwWOyo"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"description": "StartFragmentTests the `DELETE /me/albums` endpoint to remove one or more albums from the user’s saved library.  \n  \nIncludes cases for removing valid albums, attempting to remove invalid IDs, and validating proper error messages for unauthorized or forbidden requests."
+				}
+			],
+			"description": "StartFragment\n\n**Description:**  \n  \nThis folder contains all requests related to **retrieving album information** and **managing user’s saved albums**.  \n  \nIt covers multiple scenarios including:\n\n- Fetching album details\n    \n- Fetching several albums at once\n    \n- Retrieving album tracks with pagination\n    \n- Getting the user’s saved album collection\n    \n- Saving albums to the user’s library\n    \n- Removing albums from the user’s library\n    \n\nEach feature is organized into its own sub-folder with positive and negative test cases, ensuring both data correctness and proper error handling."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BaseUrl",
+			"value": "https://api.spotify.com/v1"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "albumsUrl",
+			"value": "https://api.spotify.com/v1/albums"
+		},
+		{
+			"key": "Expired Token",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
